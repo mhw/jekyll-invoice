@@ -7,9 +7,9 @@ Gem::Specification.new do |spec|
   spec.name          = "jekyll-invoice"
   spec.version       = Jekyll::Invoice::VERSION
   spec.authors       = ["Mark H. Wilkinson"]
-  spec.email         = ["mhw@kremvax.net"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.email         = ["mhw@dangerous-techniques.com"]
+  spec.summary       = %q{Produce invoices with Jekyll}
+  spec.description   = %q{Plugins for Jekyll to produce nice HTML invoices.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
