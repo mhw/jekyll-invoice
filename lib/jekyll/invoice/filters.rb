@@ -6,7 +6,7 @@ module Jekyll
       end
 
       def effective(date_ranges, field_list)
-        effective_date = self.effective_date
+        effective_date = self.effective_date.to_date
         match = date_ranges.detect do |date_range|
           s = date_range['start']
           e = date_range['end']

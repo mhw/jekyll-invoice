@@ -11,7 +11,7 @@ module Jekyll
         end
 
         def set_effective_date(d)
-          @context['page.date'] = Date.parse(d)
+          @context['page.date'] = Time.parse(d)
         end
 
         let(:tax)       { load_data('tax.yml') }
@@ -51,6 +51,11 @@ module Jekyll
           set_effective_date('2010-01-01')
           effective(addresses, 'trading registered') \
             .must_equal addresses[1]['trading']
+        end
+
+        it 'uses today as the default effective date' do
+          effective(addresses, 'registered') \
+            .must_equal addresses[1]['registered']
         end
       end
 
