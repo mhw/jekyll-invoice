@@ -5,6 +5,43 @@ module Jekyll
     describe Filters do
       include Filters
 
+      describe 'effective' do
+        before do
+          @context = {}
+        end
+
+        def set_effective_date(d)
+          @context['page.date'] = Date.parse(d)
+        end
+
+        let(:tax) { load_data('tax.yml') }
+
+        it 'extracts effective data with only an end date' do
+          set_effective_date('2007-01-01')
+          effective(tax['rates'], 'percentage').must_equal 17.5
+          set_effective_date('2008-11-30')
+          effective(tax['rates'], 'percentage').must_equal 17.5
+        end
+
+        it 'extracts effective data with a start and end date' do
+          set_effective_date('2008-12-01')
+          effective(tax['rates'], 'percentage').must_equal 15
+          set_effective_date('2009-05-21')
+          effective(tax['rates'], 'percentage').must_equal 15
+          set_effective_date('2009-12-31')
+          effective(tax['rates'], 'percentage').must_equal 15
+        end
+
+        it 'extracts effective data with only a start date' do
+          set_effective_date('2011-01-03')
+          effective(tax['rates'], 'percentage').must_equal 17.5
+          set_effective_date('2011-01-04')
+          effective(tax['rates'], 'percentage').must_equal 20
+          set_effective_date('2012-12-31')
+          effective(tax['rates'], 'percentage').must_equal 20
+        end
+      end
+
       let(:address) { [
         '82 Some Street',
         'Happyville',

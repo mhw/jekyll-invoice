@@ -1,0 +1,15 @@
+rates:
+  -
+    end: 2008-11-30
+    percentage: 17.5
+  -
+    start: 2008-12-01
+    end: 2009-12-31
+    percentage: 15
+  -
+    start: 2010-01-01
+    end: 2011-01-03
+    percentage: 17.5
+  -
+    start: 2011-01-04
+    percentage: 20

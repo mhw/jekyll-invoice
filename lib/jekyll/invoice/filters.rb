@@ -8,13 +8,15 @@ module Jekyll
       def effective(date_ranges, field_list)
         effective_date = self.effective_date
         match = date_ranges.detect do |date_range|
-          end_date = date_range['end']
-          range = if end_date.nil?
-                    date_range['start'].to_time...Time.now
-                  else
-                    date_range['start'].to_time...end_date.to_time
-                  end
-          range.cover?(effective_date)
+          s = date_range['start']
+          e = date_range['end']
+          if s.nil?
+            effective_date <= e
+          elsif e.nil?
+            s <= effective_date
+          else
+            (s..e).cover? effective_date
+          end
         end
         field = field_list.split(' ').detect {|f| match.has_key?(f) }
         if field
