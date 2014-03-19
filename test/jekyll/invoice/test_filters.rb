@@ -27,6 +27,16 @@ module Jekyll
           fmt_address(address, ' ').must_equal '82 Some Street Happyville Happyland'
         end
       end
+
+      describe 'fmt_address_with_postcode' do
+        it 'joins lines with comma' do
+          fmt_address_with_postcode(address_with_postcode).must_equal '82 Some Street, Happyville, Happyland HL4 2BN'
+        end
+
+        it 'joins lines with custom separator' do
+          fmt_address_with_postcode(address_with_postcode, '|').must_equal '82 Some Street|Happyville|Happyland HL4 2BN'
+        end
+      end
     end
   end
 end
