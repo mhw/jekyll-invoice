@@ -14,7 +14,8 @@ module Jekyll
           @context['page.date'] = Date.parse(d)
         end
 
-        let(:tax) { load_data('tax.yml') }
+        let(:tax)      { load_data('tax.yml') }
+        let(:business) { load_data('business.yml') }
 
         it 'extracts effective data with only an end date' do
           set_effective_date('2007-01-01')
@@ -39,6 +40,13 @@ module Jekyll
           effective(tax['rates'], 'percentage').must_equal 20
           set_effective_date('2012-12-31')
           effective(tax['rates'], 'percentage').must_equal 20
+        end
+
+        it 'extracts data fields in priority order' do
+          set_effective_date('2005-01-01')
+          effective(business['addresses'], 'trading registered').must_equal business['addresses'][0]['registered']
+          set_effective_date('2010-01-01')
+          effective(business['addresses'], 'trading registered').must_equal business['addresses'][1]['trading']
         end
       end
 
