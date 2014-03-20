@@ -5,12 +5,23 @@ module Jekyll
     describe Invoice do
       let(:invoice) { Invoice.new }
 
-      describe 'rate' do
-        it 'should set the prevailing payment rate' do
+      describe 'daily_rate' do
+        it 'should set the prevailing daily payment rate' do
           invoice.process <<-EOI
-            rate 60
+            daily_rate 600
           EOI
-          invoice.rate.must_equal 60
+          invoice.daily_rate.must_equal 600
+        end
+      end
+
+      describe 'hourly_rate' do
+        it 'should set the prevailing hourly payment rate' do
+          invoice.process <<-EOI
+            hourly_rate 60
+          EOI
+          invoice.hourly_rate.must_equal 60
+        end
+      end
         end
       end
     end

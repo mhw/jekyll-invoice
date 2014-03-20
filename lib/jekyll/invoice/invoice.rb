@@ -1,7 +1,7 @@
 module Jekyll
   module Invoice
     class Invoice
-      attr_accessor :rate
+      attr_accessor :daily_rate, :hourly_rate
 
       class Processor
         def initialize(invoice)
@@ -10,8 +10,13 @@ module Jekyll
 
         attr_reader :invoice
 
-        def rate(value)
-          invoice.rate = value
+        def daily_rate(value)
+          invoice.daily_rate = value
+        end
+
+        def hourly_rate(value)
+          invoice.hourly_rate = value
+        end
         end
       end
 
