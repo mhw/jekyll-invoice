@@ -33,6 +33,15 @@ module Jekyll
       def fmt_address_with_postcode(address, separator = ', ')
         [ address[0...-1].join(separator), address[-1] ].join(' ')
       end
+
+      def zero_pad(s, width = 8)
+        s = if s.nil?
+              ''
+            else
+              s.to_s
+            end
+        ('0' * width + s)[-width..-1]
+      end
     end
   end
 end

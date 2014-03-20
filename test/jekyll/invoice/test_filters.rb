@@ -95,6 +95,28 @@ module Jekyll
             .must_equal '82 Some Street|Happyville|Happyland HL4 2BN'
         end
       end
+
+      describe 'zero_pad' do
+        it 'pads a string with leading zeros' do
+          zero_pad('123', 8).must_equal '00000123'
+        end
+
+        it 'pads empty strings correctly' do
+          zero_pad('', 8).must_equal '00000000'
+        end
+
+        it 'handles nil gracefully' do
+          zero_pad(nil, 8).must_equal '00000000'
+        end
+
+        it 'handles being passed something that is not a string' do
+          zero_pad(123, 8).must_equal '00000123'
+        end
+
+        it 'can be used without an explicit width' do
+          zero_pad('123').must_equal '00000123'
+        end
+      end
     end
   end
 end
