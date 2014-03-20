@@ -1,6 +1,9 @@
 module Jekyll
   module Invoice
     class Generator < Jekyll::Generator
+      safe true
+      priority :low
+
       SLUG_MATCHER = /.*-(\d+)/
 
       def generate(site)
