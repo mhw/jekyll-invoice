@@ -1,0 +1,8 @@
+---
+layout: invoice
+---
+
+daily_rate 400
+
+line 'Schedule 1: Ruby development'
+line 'Additional work'

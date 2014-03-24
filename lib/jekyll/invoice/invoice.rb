@@ -21,6 +21,16 @@ module Jekyll
         end
 
         attr_reader :description
+
+        ATTRIBUTES_FOR_LIQUID = %w[
+          description
+        ]
+
+        def to_liquid
+          Hash[self.class::ATTRIBUTES_FOR_LIQUID.map { |attribute|
+            [attribute, send(attribute)]
+          }]
+        end
       end
 
       class Processor
@@ -46,6 +56,18 @@ module Jekyll
       def process(content)
         processor = Processor.new(self)
         processor.instance_eval(content)
+      end
+
+      ATTRIBUTES_FOR_LIQUID = %w[
+        lines
+        daily_rate
+        hourly_rate
+      ]
+
+      def to_liquid
+        Hash[self.class::ATTRIBUTES_FOR_LIQUID.map { |attribute|
+          [attribute, send(attribute)]
+        }]
       end
     end
   end

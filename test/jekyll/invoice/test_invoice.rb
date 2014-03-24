@@ -43,6 +43,19 @@ module Jekyll
             .must_equal ['Do some work', 'More work']
         end
       end
+
+      describe 'to_liquid' do
+        it 'should return a hash of attributes' do
+          invoice.process <<-EOI
+            daily_rate 600
+
+            line 'Do some work'
+          EOI
+          attrs = invoice.to_liquid
+          attrs['daily_rate'].must_equal 600
+          attrs['lines'].must_be_instance_of Array
+        end
+      end
     end
   end
 end
