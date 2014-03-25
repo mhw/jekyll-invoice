@@ -1,3 +1,10 @@
+# Taken from https://github.com/bdesham/pluralize
+#
+# Original license:
+# This script is hereby released into the public domain. To the extent
+# possible, the author places no restrictions upon its use, modification,
+# or redistribution.
+
 module Jekyll
 	module Pluralize
 
