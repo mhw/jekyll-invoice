@@ -63,6 +63,26 @@ module Jekyll
           invoice.lines[0].unit.must_equal :hour
           invoice.lines[0].rate.must_equal 60
         end
+
+        it 'should support syntactic sugar for hours' do
+          invoice.process <<-EOI
+            hourly_rate 60
+            line 'Do some work', hours: 4
+          EOI
+          invoice.lines[0].quantity.must_equal 4
+          invoice.lines[0].unit.must_equal :hour
+          invoice.lines[0].rate.must_equal 60
+        end
+
+        it 'should report an error if hours do not match prevailing units' do
+          e = proc {
+            invoice.process <<-EOI
+              daily_rate 400
+              line 'Do some work', hours: 4
+            EOI
+          }.must_raise InvoiceError
+          e.message.must_match /hours.*days/
+        end
       end
 
       describe 'to_liquid' do

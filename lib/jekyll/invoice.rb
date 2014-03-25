@@ -20,3 +20,6 @@ Jekyll::Site.class_eval do
     instances
   end
 end
+
+class InvoiceError < StandardError
+end

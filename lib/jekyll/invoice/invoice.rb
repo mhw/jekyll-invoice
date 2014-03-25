@@ -33,6 +33,13 @@ module Jekyll
         end
 
         def line(description, options = {})
+          if hours = options.delete(:hours)
+            if invoice.unit == :hour
+              options[:quantity] = hours
+            else
+              raise InvoiceError, "hours specified, but most recent rate was for #{invoice.unit}s"
+            end
+          end
           invoice.add Line.new(invoice, description, options)
         end
       end
