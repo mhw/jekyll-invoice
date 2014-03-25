@@ -33,7 +33,7 @@ module Jekyll
         end
 
         def line(description, options = {})
-          invoice.add Line.new(description, options)
+          invoice.add Line.new(invoice, description, options)
         end
       end
 

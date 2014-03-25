@@ -52,6 +52,17 @@ module Jekyll
           invoice.lines[0].quantity.must_equal 5
           invoice.lines[0].rate.must_equal 250
         end
+
+        it 'should allow line to initialize from invoice data' do
+          invoice.process <<-EOI
+            hourly_rate 60
+
+            line 'Do some work', quantity: 5
+          EOI
+          invoice.lines[0].quantity.must_equal 5
+          invoice.lines[0].unit.must_equal :hour
+          invoice.lines[0].rate.must_equal 60
+        end
       end
 
       describe 'to_liquid' do

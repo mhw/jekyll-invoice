@@ -1,14 +1,15 @@
 module Jekyll
   module Invoice
     class Line
-      def initialize(description, options = {})
+      def initialize(invoice, description, options = {})
         @description = description
         @quantity    = options[:quantity] || nil
-        @rate        = options[:rate] || 0
+        @unit        = options[:unit] || invoice.unit
+        @rate        = options[:rate] || invoice.rate || 0
       end
 
       attr_reader :description
-      attr_reader :quantity, :rate
+      attr_reader :quantity, :unit, :rate
 
       def amount
         if quantity && quantity.kind_of?(Numeric)
@@ -28,7 +29,7 @@ module Jekyll
 
       ATTRIBUTES_FOR_LIQUID = %w[
         description
-        quantity rate amount tax tax_rate
+        quantity unit rate amount tax tax_rate
       ]
 
       def to_liquid
