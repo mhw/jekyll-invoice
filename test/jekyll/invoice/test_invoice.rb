@@ -10,7 +10,8 @@ module Jekyll
           invoice.process <<-EOI
             daily_rate 600
           EOI
-          invoice.daily_rate.must_equal 600
+          invoice.rate.must_equal 600
+          invoice.unit.must_equal :day
         end
       end
 
@@ -19,7 +20,8 @@ module Jekyll
           invoice.process <<-EOI
             hourly_rate 60
           EOI
-          invoice.hourly_rate.must_equal 60
+          invoice.rate.must_equal 60
+          invoice.unit.must_equal :hour
         end
       end
 
@@ -60,7 +62,8 @@ module Jekyll
             line 'Do some work'
           EOI
           attrs = invoice.to_liquid
-          attrs['daily_rate'].must_equal 600
+          attrs['unit'].must_equal :day
+          attrs['rate'].must_equal 600
           attrs['lines'].must_be_instance_of Array
         end
       end

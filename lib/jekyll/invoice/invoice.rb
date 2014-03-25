@@ -5,7 +5,7 @@ module Jekyll
         @lines = []
       end
 
-      attr_accessor :daily_rate, :hourly_rate
+      attr_accessor :unit, :rate
 
       def add(line)
         @lines << line
@@ -23,11 +23,13 @@ module Jekyll
         attr_reader :invoice
 
         def daily_rate(value)
-          invoice.daily_rate = value
+          invoice.unit = :day
+          invoice.rate = value
         end
 
         def hourly_rate(value)
-          invoice.hourly_rate = value
+          invoice.unit = :hour
+          invoice.rate = value
         end
 
         def line(description, options = {})
@@ -42,8 +44,7 @@ module Jekyll
 
       ATTRIBUTES_FOR_LIQUID = %w[
         lines
-        daily_rate
-        hourly_rate
+        unit rate
       ]
 
       def to_liquid
