@@ -25,9 +25,18 @@ module Jekyll
         }.must_output /Generating\.\.\. done\./
 
         out = YAML.load_file(File.join(test_dir, '_site/2014/03/12/invoice-125.html'))
-        out['daily_rate'].must_equal 400
+        out['rate'].must_equal 400
+        out['unit'].must_equal 'day'
         out['lines'].size.must_equal 3
         out['lines'][0].must_equal({
+          'description' => 'No quantity or rate',
+          'quantity' => nil,
+          'rate' => 0,
+          'amount' => 0,
+          'tax' => 0,
+          'tax_rate' => 0.2
+        })
+        out['lines'][1].must_equal({
           'description' => 'Schedule 1: Ruby development',
           'quantity' => nil,
           'rate' => 2400,
@@ -35,20 +44,12 @@ module Jekyll
           'tax' => 480,
           'tax_rate' => 0.2
         })
-        out['lines'][1].must_equal({
+        out['lines'][2].must_equal({
           'description' => 'Additional work',
           'quantity' => 2,
           'rate' => 400,
           'amount' => 800,
           'tax' => 160,
-          'tax_rate' => 0.2
-        })
-        out['lines'][2].must_equal({
-          'description' => 'No quantity or rate',
-          'quantity' => nil,
-          'rate' => 0,
-          'amount' => 0,
-          'tax' => 0,
           'tax_rate' => 0.2
         })
       end

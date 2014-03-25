@@ -2,10 +2,11 @@
 layout: invoice
 ---
 
+line 'No quantity or rate'
+
 daily_rate 400
 
 line 'Schedule 1: Ruby development',
      rate: 2400
 line 'Additional work',
-     quantity: 2, rate: 400
-line 'No quantity or rate'
+     quantity: 2
