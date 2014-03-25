@@ -82,6 +82,10 @@ module Jekyll
             fmt('content', 'format').must_equal 'result'
           end
         end
+
+        it 'introduces thousands separators' do
+          fmt(12345678.347, '%.2f', ',').must_equal '12,345,678.35'
+        end
       end
 
       describe 'fmt_address' do

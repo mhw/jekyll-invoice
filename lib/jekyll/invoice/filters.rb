@@ -26,8 +26,12 @@ module Jekyll
         end
       end
 
-      def fmt(content, format)
-        Kernel.sprintf(format, content)
+      def fmt(content, format, separator = nil)
+        result = Kernel.sprintf(format, content)
+        if separator
+          result.gsub!(/(?<=\d)(?=(\d\d\d)+(?!\d))/, separator)
+        end
+        result
       end
 
       def fmt_address(address, separator = ', ')
