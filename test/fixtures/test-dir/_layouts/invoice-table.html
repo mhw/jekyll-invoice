@@ -1,3 +1,5 @@
+daily_rate: {{ invoice.daily_rate }}
 lines:
-{% for line in invoice.lines %}  - {{ line.description }}
+{% for line in invoice.lines %}  -
+    description: "{{ line.description }}"
 {% endfor %}

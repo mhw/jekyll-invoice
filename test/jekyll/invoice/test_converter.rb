@@ -23,7 +23,10 @@ module Jekyll
         Jekyll::Commands::Build.process(options)
 
         out = YAML.load_file(File.join(test_dir, '_site/2014/03/12/invoice-125.html'))
+        out['daily_rate'].must_equal 400
         out['lines'].size.must_equal 2
+        out['lines'][0]['description'].must_equal 'Schedule 1: Ruby development'
+        out['lines'][1]['description'].must_equal 'Additional work'
       end
     end
   end
