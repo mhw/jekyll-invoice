@@ -3,6 +3,7 @@ require "jekyll/invoice/converter"
 require "jekyll/invoice/filters"
 require "jekyll/invoice/generator"
 require "jekyll/invoice/invoice"
+require "jekyll/invoice/line"
 
 # Monkey patch Jekyll::Site so Jekyll::Invoice::Converter
 # can access the Site object.
