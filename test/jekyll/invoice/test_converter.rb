@@ -15,12 +15,14 @@ module Jekyll
 
       it 'hooks converter into Jekyll build process' do
         test_dir = File.expand_path('../../fixtures/test-dir', File.dirname(__FILE__))
-        options = {
-          'source' => test_dir,
-          'destination' => File.join(test_dir, '_site')
-        }
-        options = Jekyll.configuration(options)
-        Jekyll::Commands::Build.process(options)
+        proc {
+          options = {
+            'source' => test_dir,
+            'destination' => File.join(test_dir, '_site')
+          }
+          options = Jekyll.configuration(options)
+          Jekyll::Commands::Build.process(options)
+        }.must_output /Generating\.\.\. done\./
 
         out = YAML.load_file(File.join(test_dir, '_site/2014/03/12/invoice-125.html'))
         out['daily_rate'].must_equal 400
