@@ -44,13 +44,14 @@ module Jekyll
 
       ATTRIBUTES_FOR_LIQUID = %w[
         lines
-        unit rate
+        rate
       ]
 
       def to_liquid
         Hash[self.class::ATTRIBUTES_FOR_LIQUID.map { |attribute|
           [attribute, send(attribute)]
-        }]
+        } << ['unit', unit.to_s]
+        ]
       end
     end
   end

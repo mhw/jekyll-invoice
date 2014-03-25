@@ -73,7 +73,7 @@ module Jekyll
             line 'Do some work'
           EOI
           attrs = invoice.to_liquid
-          attrs['unit'].must_equal :day
+          attrs['unit'].must_equal 'day'
           attrs['rate'].must_equal 600
           attrs['lines'].must_be_instance_of Array
         end

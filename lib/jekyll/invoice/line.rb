@@ -29,13 +29,14 @@ module Jekyll
 
       ATTRIBUTES_FOR_LIQUID = %w[
         description
-        quantity unit rate amount tax tax_rate
+        quantity rate amount tax tax_rate
       ]
 
       def to_liquid
         Hash[self.class::ATTRIBUTES_FOR_LIQUID.map { |attribute|
           [attribute, send(attribute)]
-        }]
+        } << ['unit', unit.to_s]
+        ]
       end
     end
   end
