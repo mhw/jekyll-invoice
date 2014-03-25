@@ -2,4 +2,9 @@ daily_rate: {{ invoice.daily_rate }}
 lines:
 {% for line in invoice.lines %}  -
     description: "{{ line.description }}"
+    quantity: {{ line.quantity }}
+    rate: {{ line.rate }}
+    amount: {{ line.amount }}
+    tax: {{ line.tax }}
+    tax_rate: {{ line.tax_rate }}
 {% endfor %}
