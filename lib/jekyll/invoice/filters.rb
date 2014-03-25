@@ -26,6 +26,10 @@ module Jekyll
         end
       end
 
+      def fmt(content, format)
+        Kernel.sprintf(format, content)
+      end
+
       def fmt_address(address, separator = ', ')
         address.join(separator)
       end

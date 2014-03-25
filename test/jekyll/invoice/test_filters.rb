@@ -72,6 +72,18 @@ module Jekyll
         'HL4 2BN'
       ] }
 
+      describe 'fmt' do
+        it 'passes arguments to Kernel#sprintf' do
+          Kernel.stub :sprintf, ->(format, content) {
+            format.must_equal 'format'
+            content.must_equal 'content'
+            'result'
+          } do
+            fmt('content', 'format').must_equal 'result'
+          end
+        end
+      end
+
       describe 'fmt_address' do
         it 'joins lines with comma' do
           fmt_address(address) \
