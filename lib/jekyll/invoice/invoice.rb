@@ -55,6 +55,11 @@ module Jekyll
               raise InvoiceError, "hours specified, but no prevailing rate established with 'hourly_rate'"
             end
           end
+
+          if date = options.delete(:date)
+            options[:period] = date..date
+          end
+
           invoice.add Line.new(description, options)
         end
       end

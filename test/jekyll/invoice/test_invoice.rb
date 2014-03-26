@@ -79,6 +79,14 @@ module Jekyll
           }.must_raise InvoiceError
           e.message.must_match /hours/
         end
+
+        it 'should support syntactic sugar for single days' do
+          invoice.process <<-EOI
+            line 'Work', date: Date.new(2014, 2, 19)
+          EOI
+          invoice.lines[0].start_date.must_equal Date.new(2014, 2, 19)
+          invoice.lines[0].end_date.must_equal invoice.lines[0].start_date
+        end
       end
 
       describe 'to_liquid' do
