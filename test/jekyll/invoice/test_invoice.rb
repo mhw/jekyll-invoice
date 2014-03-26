@@ -137,6 +137,15 @@ module Jekyll
           attrs['tax'].must_equal 400
           attrs['total'].must_equal 2400
         end
+
+        it 'should return a hash of attributes even when invoice is empty' do
+          attrs = invoice.to_liquid
+          attrs['lines'].must_equal []
+          attrs['rates'].must_equal Hash.new
+          attrs['net_total'].must_equal 0
+          attrs['tax'].must_equal 0
+          attrs['total'].must_equal 0
+        end
       end
     end
   end

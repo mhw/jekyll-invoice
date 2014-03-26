@@ -21,11 +21,11 @@ module Jekyll
       end
 
       def net_total
-        @lines.map(&:amount).reduce(:+)
+        @lines.map(&:amount).reduce(0, :+)
       end
 
       def tax
-        @lines.map(&:tax).reduce(:+)
+        @lines.map(&:tax).reduce(0, :+)
       end
 
       def total
