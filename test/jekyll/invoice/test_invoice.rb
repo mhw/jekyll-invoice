@@ -105,18 +105,37 @@ module Jekyll
         end
       end
 
+      describe 'total calculations' do
+        it 'should total the amounts from each line' do
+          invoice.process <<-EOI
+            daily_rate 400
+            hourly_rate 60
+            line 'Work', rate: 2000
+            line 'More work', hours: 5
+            line 'More work', days: 2
+          EOI
+          net_total = 2000+5*60+2*400
+          invoice.net_total.must_equal net_total
+          invoice.tax.must_equal net_total * 0.2
+          invoice.total.must_equal net_total * 1.2
+        end
+      end
+
       describe 'to_liquid' do
         it 'should return a hash of attributes' do
           invoice.process <<-EOI
             daily_rate 600
 
-            line 'Do some work'
+            line 'Do some work', rate: 2000
           EOI
           attrs = invoice.to_liquid
           attrs['lines'].must_be_instance_of Array
           attrs['rates'].must_equal({
             'day' => 600
           })
+          attrs['net_total'].must_equal 2000
+          attrs['tax'].must_equal 400
+          attrs['total'].must_equal 2400
         end
       end
     end

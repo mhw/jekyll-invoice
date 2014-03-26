@@ -20,6 +20,18 @@ module Jekyll
         @rates[unit] = rate
       end
 
+      def net_total
+        @lines.map(&:amount).reduce(:+)
+      end
+
+      def tax
+        @lines.map(&:tax).reduce(:+)
+      end
+
+      def total
+        net_total + tax
+      end
+
       class Processor
         def initialize(invoice)
           @invoice = invoice
@@ -83,6 +95,7 @@ module Jekyll
 
       ATTRIBUTES_FOR_LIQUID = %w[
         lines
+        net_total tax total
       ]
 
       def to_liquid
