@@ -6,6 +6,7 @@ module Jekyll
         @rates = {}
       end
 
+      attr_accessor :date
       attr_reader :rates
 
       def add(line)
@@ -94,7 +95,7 @@ module Jekyll
       end
 
       ATTRIBUTES_FOR_LIQUID = %w[
-        lines
+        date lines
         net_total tax total
       ]
 

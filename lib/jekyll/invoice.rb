@@ -21,5 +21,17 @@ Jekyll::Site.class_eval do
   end
 end
 
+# and monkey patch Jekyll::Convertible so we can access
+# the Post (or Page) object too.
+Jekyll::Convertible.module_eval do
+  alias :transform_without_jekyll_invoice_hack :transform
+
+  def transform
+    converter.convertible = self if converter.respond_to?(:convertible=)
+    transform_without_jekyll_invoice_hack
+    converter.convertible = nil  if converter.respond_to?(:convertible=)
+  end
+end
+
 class InvoiceError < StandardError
 end

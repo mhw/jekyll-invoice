@@ -5,6 +5,7 @@ module Jekyll
       priority :low
 
       attr_accessor :site
+      attr_accessor :convertible
 
       def matches(ext)
         ext =~ /^\.invoice$/i
@@ -16,6 +17,9 @@ module Jekyll
 
       def convert(content)
         invoice = Invoice.new
+        if convertible.respond_to?(:date)
+          invoice.date = convertible.date
+        end
         invoice.process content
 
         layout = site.layouts['invoice-table']

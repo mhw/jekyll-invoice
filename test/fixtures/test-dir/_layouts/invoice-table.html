@@ -1,3 +1,4 @@
+date: {{ invoice.date | date: '%d/%m/%y' }}
 rate: {{ invoice.rates['day'] }}
 lines:
 {% for line in invoice.lines %}  -
