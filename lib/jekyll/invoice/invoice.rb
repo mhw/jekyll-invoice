@@ -3,9 +3,10 @@ module Jekyll
     class Invoice
       def initialize
         @lines = []
+        @rates = {}
       end
 
-      attr_accessor :unit, :rate
+      attr_reader :rates
 
       def add(line)
         @lines << line
@@ -13,6 +14,10 @@ module Jekyll
 
       def lines
         @lines
+      end
+
+      def set_rate(unit, rate)
+        @rates[unit] = rate
       end
 
       class Processor
@@ -23,24 +28,34 @@ module Jekyll
         attr_reader :invoice
 
         def daily_rate(value)
-          invoice.unit = :day
-          invoice.rate = value
+          invoice.set_rate :day, value
         end
 
         def hourly_rate(value)
-          invoice.unit = :hour
-          invoice.rate = value
+          invoice.set_rate :hour, value
         end
 
         def line(description, options = {})
-          if hours = options.delete(:hours)
-            if invoice.unit == :hour
-              options[:quantity] = hours
+          if days = options.delete(:days)
+            if rate = invoice.rates[:day]
+              options[:quantity] = days
+              options[:unit] = :day
+              options[:rate] = rate
             else
-              raise InvoiceError, "hours specified, but most recent rate was for #{invoice.unit}s"
+              raise InvoiceError, "days specified, but no prevailing rate established with 'daily_rate'"
             end
           end
-          invoice.add Line.new(invoice, description, options)
+
+          if hours = options.delete(:hours)
+            if rate = invoice.rates[:hour]
+              options[:quantity] = hours
+              options[:unit] = :hour
+              options[:rate] = rate
+            else
+              raise InvoiceError, "hours specified, but no prevailing rate established with 'hourly_rate'"
+            end
+          end
+          invoice.add Line.new(description, options)
         end
       end
 
@@ -51,14 +66,17 @@ module Jekyll
 
       ATTRIBUTES_FOR_LIQUID = %w[
         lines
-        rate
       ]
 
       def to_liquid
         Hash[self.class::ATTRIBUTES_FOR_LIQUID.map { |attribute|
           [attribute, send(attribute)]
-        } << ['unit', unit.to_s]
+        } << ['rates', stringify_keys(rates)]
         ]
+      end
+
+      def stringify_keys(h)
+        Hash[h.map { |k, v| [k.to_s, v] }]
       end
     end
   end

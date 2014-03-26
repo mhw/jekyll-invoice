@@ -10,8 +10,7 @@ module Jekyll
           invoice.process <<-EOI
             daily_rate 600
           EOI
-          invoice.rate.must_equal 600
-          invoice.unit.must_equal :day
+          invoice.rates[:day].must_equal 600
         end
       end
 
@@ -20,8 +19,16 @@ module Jekyll
           invoice.process <<-EOI
             hourly_rate 60
           EOI
-          invoice.rate.must_equal 60
-          invoice.unit.must_equal :hour
+          invoice.rates[:hour].must_equal 60
+        end
+
+        it 'should co-exist with daily_rate' do
+          invoice.process <<-EOI
+            daily_rate 600
+            hourly_rate 60
+          EOI
+          invoice.rates[:day].must_equal 600
+          invoice.rates[:hour].must_equal 60
         end
       end
 
@@ -53,17 +60,6 @@ module Jekyll
           invoice.lines[0].rate.must_equal 250
         end
 
-        it 'should allow line to initialize from invoice data' do
-          invoice.process <<-EOI
-            hourly_rate 60
-
-            line 'Do some work', quantity: 5
-          EOI
-          invoice.lines[0].quantity.must_equal 5
-          invoice.lines[0].unit.must_equal :hour
-          invoice.lines[0].rate.must_equal 60
-        end
-
         it 'should support syntactic sugar for hours' do
           invoice.process <<-EOI
             hourly_rate 60
@@ -74,14 +70,14 @@ module Jekyll
           invoice.lines[0].rate.must_equal 60
         end
 
-        it 'should report an error if hours do not match prevailing units' do
+        it 'should report an error if no prevailing rate was established' do
           e = proc {
             invoice.process <<-EOI
               daily_rate 400
               line 'Do some work', hours: 4
             EOI
           }.must_raise InvoiceError
-          e.message.must_match /hours.*days/
+          e.message.must_match /hours/
         end
       end
 
@@ -93,9 +89,10 @@ module Jekyll
             line 'Do some work'
           EOI
           attrs = invoice.to_liquid
-          attrs['unit'].must_equal 'day'
-          attrs['rate'].must_equal 600
           attrs['lines'].must_be_instance_of Array
+          attrs['rates'].must_equal({
+            'day' => 600
+          })
         end
       end
     end

@@ -1,11 +1,11 @@
 module Jekyll
   module Invoice
     class Line
-      def initialize(invoice, description, options = {})
+      def initialize(description, options = {})
         @description = description
         @quantity    = options[:quantity] || nil
-        @unit        = options[:unit] || invoice.unit
-        @rate        = options[:rate] || invoice.rate || 0
+        @unit        = options[:unit] || ''
+        @rate        = options[:rate] || 0
       end
 
       attr_reader :description

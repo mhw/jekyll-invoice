@@ -1,5 +1,4 @@
-rate: {{ invoice.rate }}
-unit: {{ invoice.unit }}
+rate: {{ invoice.rates['day'] }}
 lines:
 {% for line in invoice.lines %}  -
     description: "{{ line.description }}"

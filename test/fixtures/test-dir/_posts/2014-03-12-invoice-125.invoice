@@ -9,4 +9,4 @@ daily_rate 400
 line 'Schedule 1: Ruby development',
      rate: 2400
 line 'Additional work',
-     quantity: 2
+     days: 2
