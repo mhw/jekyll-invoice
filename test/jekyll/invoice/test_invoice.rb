@@ -87,6 +87,22 @@ module Jekyll
           invoice.lines[0].start_date.must_equal Date.new(2014, 2, 19)
           invoice.lines[0].end_date.must_equal invoice.lines[0].start_date
         end
+
+        it 'should support syntactic sugar for date ranges' do
+          invoice.process <<-EOI
+            line 'Work', period: '2014-3-10'..'2014-03-16'
+          EOI
+          invoice.lines[0].start_date.must_equal Date.new(2014, 3, 10)
+          invoice.lines[0].end_date.must_equal Date.new(2014, 3, 16)
+        end
+
+        it 'should support syntactic sugar for single days' do
+          invoice.process <<-EOI
+            line 'Work', date: '2014-3-10'
+          EOI
+          invoice.lines[0].start_date.must_equal Date.new(2014, 3, 10)
+          invoice.lines[0].end_date.must_equal invoice.lines[0].start_date
+        end
       end
 
       describe 'to_liquid' do

@@ -59,9 +59,21 @@ module Jekyll
           if date = options.delete(:date)
             options[:period] = date..date
           end
+          if period = options[:period]
+            options[:period] = convert_dates(period)
+          end
 
           invoice.add Line.new(description, options)
         end
+
+        private
+          def convert_dates(o)
+            case o
+            when Range then convert_dates(o.first)..convert_dates(o.last)
+            when String then Date.parse(o)
+            else o
+            end
+          end
       end
 
       def process(content)
