@@ -51,6 +51,9 @@ module Jekyll
           'tax' => 160,
           'tax_rate' => 0.2
         })
+        out['net_total'].must_equal 3200
+        out['tax'].must_equal 640
+        out['total'].must_equal 3840
       end
     end
   end
