@@ -4,7 +4,7 @@ module Jekyll
       def initialize(description, options = {})
         @description = description
         @quantity    = options[:quantity] || nil
-        @unit        = options[:unit] || ''
+        @unit        = options[:unit] || nil
         @rate        = options[:rate] || 0
       end
 
@@ -35,8 +35,9 @@ module Jekyll
       def to_liquid
         Hash[self.class::ATTRIBUTES_FOR_LIQUID.map { |attribute|
           [attribute, send(attribute)]
-        } << ['unit', unit.to_s]
-        ]
+        }].merge({
+          'unit' => unit ? unit.to_s : nil
+        })
       end
     end
   end
