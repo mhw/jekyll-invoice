@@ -6,10 +6,15 @@ module Jekyll
         @quantity    = options[:quantity] || nil
         @unit        = options[:unit] || nil
         @rate        = options[:rate] || 0
+        if p = options[:period]
+          @start_date = p.first
+          @end_date   = p.last
+        end
       end
 
       attr_reader :description
       attr_reader :quantity, :unit, :rate
+      attr_reader :start_date, :end_date
 
       def amount
         if quantity && quantity.kind_of?(Numeric)
@@ -30,6 +35,7 @@ module Jekyll
       ATTRIBUTES_FOR_LIQUID = %w[
         description
         quantity rate amount tax tax_rate
+        start_date end_date
       ]
 
       def to_liquid

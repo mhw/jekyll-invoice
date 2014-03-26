@@ -38,13 +38,26 @@ module Jekyll
         line.tax_rate.must_equal 0.2
       end
 
+      it 'should explode period into start and end' do
+        line = Line.new('Work', period: Date.new(2014, 3, 17)..Date.new(2014, 3, 23))
+        line.start_date.must_equal Date.new(2014, 3, 17)
+        line.end_date.must_equal Date.new(2014, 3, 23)
+      end
+
       describe 'to_liquid' do
         it 'should return a hash of attributes' do
-          line = Line.new('Work', quantity: 5, unit: :hour, rate: 60)
+          line = Line.new('Work', quantity: 5, unit: :hour, rate: 60,
+                          period: Date.new(2014, 3, 17)..Date.new(2014, 3, 23))
           attrs = line.to_liquid
+          attrs['description'].must_equal 'Work'
           attrs['quantity'].must_equal 5
           attrs['unit'].must_equal 'hour'
           attrs['rate'].must_equal 60
+          attrs['amount'].must_equal 300
+          attrs['tax'].must_equal 60
+          attrs['tax_rate'].must_equal 0.2
+          attrs['start_date'].must_equal Date.new(2014, 3, 17)
+          attrs['end_date'].must_equal Date.new(2014, 3, 23)
         end
 
         it 'should set the unit attribute to nil if not specified' do
