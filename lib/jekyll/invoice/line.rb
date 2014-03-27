@@ -26,7 +26,7 @@ module Jekyll
       end
 
       def tax
-        amount * tax_rate
+        amount * tax_rate / 100.0
       end
 
       ATTRIBUTES_FOR_LIQUID = %w[

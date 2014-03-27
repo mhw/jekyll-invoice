@@ -94,7 +94,7 @@ module Jekyll
 
             line 'Do some work', rate: 1000
           EOI
-          invoice.lines[0].tax_rate.must_equal 0.2
+          invoice.lines[0].tax_rate.must_equal 20
         end
 
         it 'should support syntactic sugar for hours' do

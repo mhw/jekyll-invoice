@@ -90,7 +90,7 @@ module Jekyll
             options[:period] = convert_dates(period)
           end
 
-          options[:tax_rate] = invoice.tax_rate / 100.0 unless options.has_key?(:tax_rate)
+          options[:tax_rate] = invoice.tax_rate unless options.has_key?(:tax_rate)
 
           invoice.add Line.new(description, options)
         end
