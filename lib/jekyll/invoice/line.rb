@@ -6,6 +6,7 @@ module Jekyll
         @quantity    = options[:quantity] || nil
         @unit        = options[:unit] || nil
         @rate        = options[:rate] || 0
+        @tax_rate    = options[:tax_rate] || 0
         if p = options[:period]
           @start_date = p.first
           @end_date   = p.last
@@ -13,7 +14,7 @@ module Jekyll
       end
 
       attr_reader :description
-      attr_reader :quantity, :unit, :rate
+      attr_reader :quantity, :unit, :rate, :tax_rate
       attr_reader :start_date, :end_date
 
       def amount
@@ -26,10 +27,6 @@ module Jekyll
 
       def tax
         amount * tax_rate
-      end
-
-      def tax_rate
-        0.2
       end
 
       ATTRIBUTES_FOR_LIQUID = %w[

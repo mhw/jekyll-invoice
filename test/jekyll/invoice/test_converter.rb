@@ -27,6 +27,7 @@ module Jekyll
         out = YAML.load_file(File.join(test_dir, '_site/2014/03/12/invoice-125.html'))
         out['date'].must_equal '12/03/14'
         out['rate'].must_equal 400
+        out['tax_rate'].must_equal 20
         out['lines'].size.must_equal 3
         out['lines'][0].must_equal({
           'description' => 'No quantity or rate',
@@ -34,7 +35,7 @@ module Jekyll
           'rate' => 0,
           'amount' => 0,
           'tax' => 0,
-          'tax_rate' => 0.2
+          'tax_rate' => 0
         })
         out['lines'][1].must_equal({
           'description' => 'Schedule 1: Ruby development',

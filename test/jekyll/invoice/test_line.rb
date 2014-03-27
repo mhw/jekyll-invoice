@@ -33,7 +33,7 @@ module Jekyll
       end
 
       it 'should calculate tax on amount' do
-        line = Line.new('Work', rate: 1000)
+        line = Line.new('Work', rate: 1000, tax_rate: 0.2)
         line.tax.must_equal 200
         line.tax_rate.must_equal 0.2
       end
@@ -46,7 +46,7 @@ module Jekyll
 
       describe 'to_liquid' do
         it 'should return a hash of attributes' do
-          line = Line.new('Work', quantity: 5, unit: :hour, rate: 60,
+          line = Line.new('Work', quantity: 5, unit: :hour, rate: 60, tax_rate: 0.2,
                           period: Date.new(2014, 3, 17)..Date.new(2014, 3, 23))
           attrs = line.to_liquid
           attrs['description'].must_equal 'Work'

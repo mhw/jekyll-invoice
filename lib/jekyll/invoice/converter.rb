@@ -16,9 +16,14 @@ module Jekyll
       end
 
       def convert(content)
-        invoice = Invoice.new
-        if convertible.respond_to?(:date)
-          invoice.date = convertible.date
+        effective_date = if convertible.respond_to?(:date)
+                           convertible.date.to_date
+                         else
+                           Date.today
+                         end
+        invoice = Invoice.new(effective_date)
+        if tax = site.data['tax']
+          invoice.tax_rates = tax['rates']
         end
         invoice.process content
 

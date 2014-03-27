@@ -9,6 +9,7 @@ layout: invoice
 
 line 'No quantity or rate'
 
+tax :vat
 daily_rate 400
 
 line 'Schedule 1: Ruby development',

@@ -3,7 +3,7 @@ require 'test_helper'
 module Jekyll
   module Invoice
     describe Invoice do
-      let(:invoice) { Invoice.new }
+      let(:invoice) { Invoice.new(Date.new(2013, 4, 24)) }
 
       describe 'daily_rate' do
         it 'should set the prevailing daily payment rate' do
@@ -29,6 +29,33 @@ module Jekyll
           EOI
           invoice.rates[:day].must_equal 600
           invoice.rates[:hour].must_equal 60
+        end
+      end
+
+      describe 'tax' do
+        describe 'with no rates loaded' do
+          it 'should default to no tax type' do
+            invoice.tax_type.must_equal nil
+            invoice.tax_rate.must_equal 0
+          end
+        end
+
+        describe 'with rates loaded' do
+          before do
+            invoice.tax_rates = load_data('tax.yml')['rates']
+          end
+
+          it 'should select the effective tax rates' do
+            invoice.tax_rates.must_equal 'vat' => 20
+          end
+
+          it 'should set the prevailing type of tax' do
+            invoice.process <<-EOI
+              tax :vat
+            EOI
+            invoice.tax_type.must_equal :vat
+            invoice.tax_rate.must_equal 20
+          end
         end
       end
 
@@ -58,6 +85,16 @@ module Jekyll
           EOI
           invoice.lines[0].quantity.must_equal 5
           invoice.lines[0].rate.must_equal 250
+        end
+
+        it 'should set tax rate set by the invoice' do
+          invoice.tax_rates = load_data('tax.yml')['rates']
+          invoice.process <<-EOI
+            tax :vat
+
+            line 'Do some work', rate: 1000
+          EOI
+          invoice.lines[0].tax_rate.must_equal 0.2
         end
 
         it 'should support syntactic sugar for hours' do
@@ -106,8 +143,13 @@ module Jekyll
       end
 
       describe 'total calculations' do
+        before do
+          invoice.tax_rates = load_data('tax.yml')['rates']
+        end
+
         it 'should total the amounts from each line' do
           invoice.process <<-EOI
+            tax :vat
             daily_rate 400
             hourly_rate 60
             line 'Work', rate: 2000
@@ -122,8 +164,13 @@ module Jekyll
       end
 
       describe 'to_liquid' do
+        before do
+          invoice.tax_rates = load_data('tax.yml')['rates']
+        end
+
         it 'should return a hash of attributes' do
           invoice.process <<-EOI
+            tax :vat
             daily_rate 600
 
             line 'Do some work', rate: 2000

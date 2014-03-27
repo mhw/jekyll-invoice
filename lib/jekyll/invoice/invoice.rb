@@ -1,13 +1,16 @@
 module Jekyll
   module Invoice
     class Invoice
-      def initialize
+      def initialize(date)
+        @date = date
         @lines = []
         @rates = {}
+        @tax_rates = {}
       end
 
-      attr_accessor :date
-      attr_reader :rates
+      attr_reader :date
+      attr_reader :rates, :tax_rates
+      attr_accessor :tax_type
 
       def add(line)
         @lines << line
@@ -19,6 +22,18 @@ module Jekyll
 
       def set_rate(unit, rate)
         @rates[unit] = rate
+      end
+
+      def tax_rates=(tax_rates)
+        @tax_rates = Utils.effective(tax_rates, date)
+      end
+
+      def tax_rate
+        if tax_type
+          tax_rates[tax_type.to_s]
+        else
+          0
+        end
       end
 
       def net_total
@@ -39,6 +54,10 @@ module Jekyll
         end
 
         attr_reader :invoice
+
+        def tax(type)
+          invoice.tax_type = type
+        end
 
         def daily_rate(value)
           invoice.set_rate :day, value
@@ -76,6 +95,8 @@ module Jekyll
             options[:period] = convert_dates(period)
           end
 
+          options[:tax_rate] = invoice.tax_rate / 100.0 unless options.has_key?(:tax_rate)
+
           invoice.add Line.new(description, options)
         end
 
@@ -95,7 +116,7 @@ module Jekyll
       end
 
       ATTRIBUTES_FOR_LIQUID = %w[
-        date lines
+        date lines tax_type tax_rate
         net_total tax total
       ]
 
