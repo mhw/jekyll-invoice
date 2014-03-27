@@ -1,4 +1,5 @@
 require "jekyll/invoice/version"
+require "jekyll/invoice/utils"
 require "jekyll/invoice/converter"
 require "jekyll/invoice/filters"
 require "jekyll/invoice/generator"

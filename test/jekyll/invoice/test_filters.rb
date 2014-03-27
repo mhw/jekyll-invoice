@@ -19,29 +19,17 @@ module Jekyll
         let(:business)  { load_data('business.yml') }
         let(:addresses) { business['addresses'] }
 
-        it 'extracts effective data with only an end date' do
+        it 'uses effective date from context' do
           set_effective_date('2007-01-01')
-          effective(rates, 'percentage').must_equal 17.5
-          set_effective_date('2008-11-30')
-          effective(rates, 'percentage').must_equal 17.5
-        end
-
-        it 'extracts effective data with a start and end date' do
-          set_effective_date('2008-12-01')
-          effective(rates, 'percentage').must_equal 15
+          effective(rates).must_equal 'vat' => 17.5
           set_effective_date('2009-05-21')
-          effective(rates, 'percentage').must_equal 15
-          set_effective_date('2009-12-31')
-          effective(rates, 'percentage').must_equal 15
+          effective(rates).must_equal 'vat' => 15
+          set_effective_date('2012-12-31')
+          effective(rates).must_equal 'vat' => 20
         end
 
-        it 'extracts effective data with only a start date' do
-          set_effective_date('2011-01-03')
-          effective(rates, 'percentage').must_equal 17.5
-          set_effective_date('2011-01-04')
-          effective(rates, 'percentage').must_equal 20
-          set_effective_date('2012-12-31')
-          effective(rates, 'percentage').must_equal 20
+        it 'uses today as a default effective date' do
+          effective(rates).must_equal 'vat' => 20
         end
 
         it 'extracts data fields in priority order' do
