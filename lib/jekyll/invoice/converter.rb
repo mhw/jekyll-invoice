@@ -22,6 +22,9 @@ module Jekyll
                            Date.today
                          end
         invoice = Invoice.new(effective_date)
+        if tax_rate = site.config['default_tax']
+          invoice.tax_type = tax_rate.to_sym
+        end
         if tax = site.data['tax']
           invoice.tax_rates = tax['rates']
         end

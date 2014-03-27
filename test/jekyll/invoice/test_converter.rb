@@ -57,6 +57,25 @@ module Jekyll
         out['tax'].must_equal 640
         out['total'].must_equal 3840
       end
+
+      it 'gets default tax rate from _config.yml if available' do
+        test_dir = File.expand_path('../../fixtures/test-dir-with-default-tax-rate', File.dirname(__FILE__))
+        proc {
+          options = {
+            'source' => test_dir,
+            'destination' => File.join(test_dir, '_site')
+          }
+          options = Jekyll.configuration(options)
+          Jekyll::Commands::Build.process(options)
+        }.must_output /Generating\.\.\. done\./
+
+        out = YAML.load_file(File.join(test_dir, '_site/2014/03/12/invoice-125.html'))
+        out['tax_rate'].must_equal 20
+        out['lines'].size.must_equal 3
+        out['lines'][0]['tax_rate'].must_equal 0.2
+        out['lines'][1]['tax_rate'].must_equal 0.2
+        out['lines'][2]['tax_rate'].must_equal 0.2
+      end
     end
   end
 end

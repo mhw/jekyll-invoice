@@ -1,0 +1,4 @@
+name: Invoices
+markdown: redcarpet
+pygments: false
+default_tax: vat
