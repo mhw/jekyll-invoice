@@ -8,16 +8,11 @@ module Jekyll
         @tax_rates = {}
       end
 
-      attr_reader :date
-      attr_reader :rates, :tax_rates
+      attr_reader :date, :lines, :rates, :tax_rates
       attr_accessor :tax_type
 
       def add(line)
         @lines << line
-      end
-
-      def lines
-        @lines
       end
 
       def set_rate(unit, rate)
