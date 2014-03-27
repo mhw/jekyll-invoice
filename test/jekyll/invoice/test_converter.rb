@@ -13,8 +13,8 @@ module Jekyll
         conv.matches('.markdown').must_be_nil
       end
 
-      it 'hooks converter into Jekyll build process' do
-        test_dir = File.expand_path('../../fixtures/test-dir', File.dirname(__FILE__))
+      def process_fixture_site(name)
+        test_dir = File.expand_path("../../fixtures/#{name}", File.dirname(__FILE__))
         proc {
           options = {
             'source' => test_dir,
@@ -23,7 +23,11 @@ module Jekyll
           options = Jekyll.configuration(options)
           Jekyll::Commands::Build.process(options)
         }.must_output /Generating\.\.\. done\./
+        test_dir
+      end
 
+      it 'hooks converter into Jekyll build process' do
+        test_dir = process_fixture_site('test-dir')
         out = YAML.load_file(File.join(test_dir, '_site/2014/03/12/invoice-125.html'))
         out['date'].must_equal '12/03/14'
         out['rate'].must_equal 400
@@ -59,16 +63,7 @@ module Jekyll
       end
 
       it 'gets default tax rate from _config.yml if available' do
-        test_dir = File.expand_path('../../fixtures/test-dir-with-default-tax-rate', File.dirname(__FILE__))
-        proc {
-          options = {
-            'source' => test_dir,
-            'destination' => File.join(test_dir, '_site')
-          }
-          options = Jekyll.configuration(options)
-          Jekyll::Commands::Build.process(options)
-        }.must_output /Generating\.\.\. done\./
-
+        test_dir = process_fixture_site('test-dir-with-default-tax-rate')
         out = YAML.load_file(File.join(test_dir, '_site/2014/03/12/invoice-125.html'))
         out['tax_rate'].must_equal 20
         out['lines'].size.must_equal 3
