@@ -30,6 +30,8 @@ module Jekyll
         test_dir = process_fixture_site('test-dir')
         out = YAML.load_file(File.join(test_dir, '_site/2014/03/12/invoice-125.html'))
         out['date'].must_equal '12/03/14'
+        out['invoice_number'].must_equal 125
+        out['copy_invoice'].must_equal false
         out['rate'].must_equal 400
         out['tax_rate'].must_equal 20
         out['lines'].size.must_equal 3
@@ -70,6 +72,14 @@ module Jekyll
         out['lines'][0]['tax_rate'].must_equal 20
         out['lines'][1]['tax_rate'].must_equal 20
         out['lines'][2]['tax_rate'].must_equal 20
+      end
+
+      it 'creates a copy invoice as well' do
+        test_dir = process_fixture_site('test-dir')
+        out = YAML.load_file(File.join(test_dir, '_site/2014/03/12/copy-invoice-125.html'))
+        out['date'].must_equal '12/03/14'
+        out['invoice_number'].must_equal 125
+        out['copy_invoice'].must_equal true
       end
     end
   end

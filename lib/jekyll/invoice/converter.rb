@@ -31,7 +31,7 @@ module Jekyll
         invoice.process content
 
         layout = site.layouts['invoice-table']
-        payload = { 'invoice' => invoice }
+        payload = { 'invoice' => invoice, 'page' => convertible.to_liquid }
         info = { :filters => [Jekyll::Filters], :registers => { :site => self.site } }
         Liquid::Template.parse(layout.content).render!(payload, info)
       end

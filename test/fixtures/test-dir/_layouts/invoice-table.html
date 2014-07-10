@@ -1,4 +1,6 @@
 date: {{ invoice.date | date: '%d/%m/%y' }}
+invoice_number: {{ page.invoice_number }}
+copy_invoice: {{ page.copy_invoice }}
 rate: {{ invoice.rates['day'] }}
 tax_rate: {{ invoice.tax_rate }}
 lines:
