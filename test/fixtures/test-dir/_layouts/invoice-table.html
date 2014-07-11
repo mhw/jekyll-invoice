@@ -1,6 +1,9 @@
 date: {{ invoice.date | date: '%d/%m/%y' }}
 invoice_number: {{ page.invoice_number }}
 copy_invoice: {{ page.copy_invoice }}
+{% unless page.copy_invoice %}pdf_url: {{ page.pdf_url }}
+copy_invoice_url: {{ page.copy_invoice_url }}
+copy_invoice_pdf_url: {{ page.copy_invoice_pdf_url }}{% endunless %}
 rate: {{ invoice.rates['day'] }}
 tax_rate: {{ invoice.tax_rate }}
 lines:

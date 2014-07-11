@@ -32,6 +32,9 @@ module Jekyll
         out['date'].must_equal '12/03/14'
         out['invoice_number'].must_equal 125
         out['copy_invoice'].must_equal false
+        out['pdf_url'].must_equal '/2014/03/12/invoice-125.pdf'
+        out['copy_invoice_url'].must_equal '/2014/03/12/copy-invoice-125.html'
+        out['copy_invoice_pdf_url'].must_equal '/2014/03/12/copy-invoice-125.pdf'
         out['rate'].must_equal 400
         out['tax_rate'].must_equal 20
         out['lines'].size.must_equal 3

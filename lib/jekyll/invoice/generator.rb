@@ -12,6 +12,9 @@ module Jekyll
           if m = SLUG_MATCHER.match(post.slug)
             post.data['invoice_number'] = m[1]
             post.data['copy_invoice'] = false
+            post.data['pdf_url'] = rewrite_filename(post.url, '', '.pdf')
+            post.data['copy_invoice_url'] = rewrite_filename(post.url, 'copy-', '')
+            post.data['copy_invoice_pdf_url'] = rewrite_filename(post.url, 'copy-', '.pdf')
 
             copy_invoice = CopyInvoice.new(site, site.source, '', post.name)
             copy_invoice.data['invoice_number'] = m[1]
@@ -20,6 +23,16 @@ module Jekyll
           end
         end
         site.posts.concat copy_invoices
+      end
+
+      def rewrite_filename(src, prefix, ext)
+        f = if ext.length > 0
+              File.basename(src, '.html') + ext
+            else
+              File.basename(src)
+            end
+        f = prefix + f if prefix.length > 0
+        File.join(File.dirname(src), f)
       end
     end
   end
