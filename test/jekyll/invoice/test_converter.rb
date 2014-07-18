@@ -22,7 +22,7 @@ module Jekyll
           }
           options = Jekyll.configuration(options)
           Jekyll::Commands::Build.process(options)
-        }.must_output /Generating\.\.\. done\./
+        }.must_output /Generating\.\.\.\s+done\./
         test_dir
       end
 
