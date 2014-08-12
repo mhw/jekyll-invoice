@@ -1,0 +1,18 @@
+---
+layout: invoice
+---
+
+# This line is recognised as the excerpt when
+# excerpt_separator has its default value. We include
+# it here to verify that conversion still works with
+# exceprts that create no invoice data.
+
+line 'No quantity or rate'
+
+tax :vat
+daily_rate 400
+
+line 'Schedule 1: Ruby development',
+     rate: 2400
+line 'Additional work',
+     days: 2

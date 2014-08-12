@@ -16,7 +16,12 @@ module Jekyll
             post.data['copy_invoice_url'] = rewrite_filename(post.url, 'copy-', '')
             post.data['copy_invoice_pdf_url'] = rewrite_filename(post.url, 'copy-', '.pdf')
 
-            copy_invoice = CopyInvoice.new(site, site.source, '', post.name)
+            copy_invoice_class = if post.kind_of? Draft
+                                   CopyDraftInvoice
+                                 else
+                                   CopyInvoice
+                                 end
+            copy_invoice = copy_invoice_class.new(site, site.source, '', post.name)
             copy_invoice.data['invoice_number'] = m[1]
             copy_invoice.data['copy_invoice'] = true
             copy_invoices << copy_invoice

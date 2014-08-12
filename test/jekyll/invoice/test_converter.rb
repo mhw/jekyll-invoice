@@ -18,7 +18,8 @@ module Jekyll
         proc {
           options = {
             'source' => test_dir,
-            'destination' => File.join(test_dir, '_site')
+            'destination' => File.join(test_dir, '_site'),
+            'show_drafts' => true
           }
           options = Jekyll.configuration(options)
           Jekyll::Commands::Build.process(options)
@@ -82,6 +83,16 @@ module Jekyll
         out = YAML.load_file(File.join(test_dir, '_site/2014/03/12/copy-invoice-125.html'))
         out['date'].must_equal '12/03/14'
         out['invoice_number'].must_equal 125
+        out['copy_invoice'].must_equal true
+      end
+
+      it 'handles draft invoices correctly' do
+        test_dir = process_fixture_site('test-dir')
+        draft_time = File.mtime(File.join(test_dir, '_drafts/invoice-126.invoice'))
+        date_slug = draft_time.strftime('%Y/%m/%d')
+        out = YAML.load_file(File.join(test_dir, "_site/#{date_slug}/copy-invoice-126.html"))
+        out['date'].must_equal draft_time.strftime('%d/%m/%y')
+        out['invoice_number'].must_equal 126
         out['copy_invoice'].must_equal true
       end
     end
