@@ -29,6 +29,7 @@ module Jekyll
           invoice.tax_rates = tax['rates']
         end
         invoice.process content
+        convertible.data['invoice'] = invoice
 
         layout = site.layouts['invoice-table']
         payload = { 'invoice' => invoice, 'page' => convertible.to_liquid }

@@ -66,6 +66,7 @@ module Jekyll
         out['net_total'].must_equal 3200
         out['tax'].must_equal 640
         out['total'].must_equal 3840
+        out['total_via_page'].must_equal 3840
       end
 
       it 'gets default tax rate from _config.yml if available' do
