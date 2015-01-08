@@ -1,0 +1,59 @@
+<div id="detail">
+ <table>
+  <tr id="detail-titles">
+   <td class="description" colspan="2"><div class="fancy-rule"><u>Description</u></div></td>
+   <td class="quantity"><div class="fancy-rule"><u>Quantity</u></div></td>
+   <td class="rate"><div class="fancy-rule"><u>Rate</u></div></td>
+   <td class="amount"><div class="fancy-rule"><u>Amount</u></div></td>
+   <td class="tax"><div class="fancy-rule"><u>VAT</u></div></td>
+   <td class="tax-rate"><div class="fancy-rule"><u>VAT Rate</u></div></td>
+  </tr>
+  {% assign required_lines = 9 %}
+  {% for line in invoice.lines %}
+  <tr class="item">
+   {% if line.start_date %}
+    <td class="dates">&middot; {{ line.start_date | date: '%d/%m/%y'}}
+     {% if line.end_date != line.start_date %} to {{ line.end_date | date: '%d/%m/%y' }}{% endif %}
+    </td>
+    <td class="description">{{ line.description }}</td>
+   {% else %}
+    <td class="description" colspan="2">{{ line.description }}</td>
+   {% endif %}
+   <td class="quantity">{% if line.unit %}{{ line.quantity | pluralize: line.unit }}{% else %}{{ line.quantity }}{% endif %}</td>
+   <td class="rate">&pound;{{ line.rate | fmt: '%.2f', ',' }}</td>
+   <td class="amount">&pound;{{ line.amount | fmt: '%.2f', ',' }}</td>
+   <td class="tax">&pound;{{ line.tax | fmt: '%.2f', ',' }}</td>
+   <td class="tax-rate">{{ line.tax_rate | fmt: '%d' }}%</td>
+  </tr>
+  {% capture required_lines %}{{ required_lines | minus:1 }}{% endcapture %}
+  {% endfor %}
+  {% for i in (1..required_lines) %}
+  <tr class="item">
+   <td colspan="7">&nbsp;</td>
+  </tr>
+  {% endfor %}
+  <tr id="rule">
+   <td class="description" colspan="2">&nbsp;</td>
+   <td class="quantity">&nbsp;</td>
+   <td class="rate">&nbsp;</td>
+   <td class="amount">&nbsp;</td>
+   <td class="tax">&nbsp;</td>
+   <td class="tax-rate">&nbsp;</td>
+  </tr>
+  <tr id="detail-totals" class="totals">
+   <td class="description" colspan="4">Total</td>
+   <td class="amount">&pound;{{ invoice.net_total | fmt: '%.2f', ',' }}</td>
+   <td class="tax">&pound;{{ invoice.tax | fmt: '%.2f', ',' }}</td>
+  </tr>
+  <tr id="detail-vat" class="totals">
+   <td class="description" colspan="4">VAT</td>
+   <td class="amount">&pound;{{ invoice.tax | fmt: '%.2f', ',' }}</td>
+   <td class="tax">&nbsp;</td>
+  </tr>
+  <tr id="detail-total" class="totals">
+   <td class="description" colspan="4">Invoice Total</td>
+   <td class="amount">&pound;{{ invoice.total | fmt: '%.2f', ',' }}</td>
+   <td class="tax">&nbsp;</td>
+  </tr>
+ </table>
+</div>

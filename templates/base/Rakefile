@@ -1,0 +1,145 @@
+# Derived from https://github.com/gummesson/jekyll-rake-boilerplate
+#
+# == Dependencies ==============================================================
+
+require 'rake'
+require 'yaml'
+require 'fileutils'
+
+# == Configuration =============================================================
+
+# Set "rake build" as default task
+task :default => :build
+
+# Load the configuration file
+CONFIG = YAML.load_file("_config.yml")
+
+# Get and parse the date
+DATE = Time.now.strftime("%Y-%m-%d")
+
+# Directories
+POSTS = "_posts"
+DRAFTS = "_drafts"
+
+# == Helpers ===================================================================
+
+# Check that a customer is listed.
+def check_customer(customer)
+  if customer.nil? or customer.empty?
+    customer_file = '_data/customers.yml'
+    customers = YAML.load_file customer_file
+    puts "Customers listed in #{customer_file}:"
+    customers.each_key do |c|
+      puts c
+    end
+    raise "Please supply a customer to the task."
+  end
+end
+
+# Find the next invoice number
+def next_invoice_number
+  invoice_number = 0
+  invoices = FileList["#{DRAFTS}/*.invoice", "#{POSTS}/*.invoice"]
+  invoices.each do |invoice|
+    if invoice =~ /invoice-(\d+)/
+      n = $1.to_i
+      invoice_number = n if n > invoice_number
+    end
+  end
+  puts "invoice number #{invoice_number+1}"
+  invoice_number+1
+end
+
+# Transform the invoice number to a slug
+def transform_to_slug(invoice_number)
+  "invoice-#{invoice_number}.invoice"
+end
+
+# Read the template file
+def read_file(template)
+  File.read(template)
+end
+
+# Save the file with the customer in the YAML front matter
+def write_file(content, customer, directory, filename)
+  parsed_content = "#{content.sub("customer:", "customer: \"#{customer}\"")}"
+  File.write("#{directory}/#{filename}", parsed_content)
+  puts "#{filename} was created in '#{directory}'."
+end
+
+# Create the file with the slug and open the default editor
+def create_file(directory, filename, content, customer, editor)
+  FileUtils.mkdir(directory) unless File.exists?(directory)
+  if File.exists?("#{directory}/#{filename}")
+    raise "The file already exists."
+  else
+    write_file(content, customer, directory, filename)
+    if editor && !editor.nil?
+      sleep 1
+      system("#{editor} #{directory}/#{filename}")
+    end
+  end
+end
+
+# == Tasks =====================================================================
+
+# rake invoice["customer"]
+desc "Create a new invoice in _posts"
+task :invoice, :customer do |t, args|
+  customer = args[:customer]
+  template = CONFIG["post"]["template"]
+  editor = CONFIG["editor"]
+  check_customer(customer)
+  invoice_number = next_invoice_number
+  filename = "#{DATE}-#{transform_to_slug(invoice_number)}"
+  content = read_file(template)
+  create_file(POSTS, filename, content, customer, editor)
+end
+
+# rake draft["customer"]
+desc "Create a new invoice _drafts"
+task :draft, :customer do |t, args|
+  customer = args[:customer]
+  template = CONFIG["post"]["template"]
+  editor = CONFIG["editor"]
+  check_customer(customer)
+  invoice_number = next_invoice_number
+  filename = transform_to_slug(invoice_number)
+  content = read_file(template)
+  create_file(DRAFTS, filename, content, customer, editor)
+end
+
+# rake issue
+desc "Move a post from _drafts to _posts"
+task :issue do
+  files = Dir["#{DRAFTS}/*.invoice"]
+  files.each_with_index do |file, index|
+    puts "#{index + 1}: #{file}".sub("#{DRAFTS}/", "")
+  end
+  print "> "
+  number = $stdin.gets
+  if number =~ /\D/
+    filename = files[number.to_i - 1].sub("#{DRAFTS}/", "")
+    FileUtils.mkdir(POSTS) unless File.exists?(POSTS)
+    FileUtils.mv("#{DRAFTS}/#{filename}", "#{POSTS}/#{DATE}-#{filename}")
+    puts "#{filename} was moved to '#{POSTS}'."
+  else
+    puts "Please choose a draft by the assigned number."
+  end
+end
+
+# rake build
+desc "Build the site"
+task :build do
+  system("bundle exec jekyll build --drafts")
+  if htmltopdf = CONFIG['htmltopdf']
+    invoices = Dir["_site/*/*/*/*invoice-*.html"]
+    invoices.each do |src|
+      pdf = File.join(File.dirname(src), File.basename(src, '.html') + '.pdf')
+      system "#{htmltopdf} #{src} #{pdf}"
+      # Remove content that may change each time the PDF is regenerated
+      # in case we are versioning the PDF output.
+      system "sed -i -r -e '/^\\/(Producer|CreationDate) /d' #{pdf}"
+    end
+  end
+end

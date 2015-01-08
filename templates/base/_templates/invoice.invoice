@@ -1,0 +1,12 @@
+---
+layout: invoice
+customer:
+paid: no
+---
+
+hourly_rate 60
+
+line 'JavaScript Development',
+     quantity: 'fixed price', rate: 2000, period: '2014-08-25'..'2014-09-07'
+line 'Additional requirements',
+     hours: 2, date: '2014-09-08'

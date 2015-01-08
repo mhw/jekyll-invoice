@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.name }}</title>
+  <meta name="viewport" content="width=device-width">
+  {% assign lvl = page.url | append:'X' | split:'/' | size %}
+  {% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
+  <link rel="stylesheet" href="{{ relative }}css/invoice.css">
+ </head>
+ <body>
+  <h1 id="logotype">{{ site.data.business.name }}</h1>
+  <div id="sender">
+   {{ site.data.business.name }}<br>
+   {{ site.data.business.addresses | effective: 'trading registered' | fmt_address: '<br>' }}
+  </div>
+  {{ content }}
+  <div id="prefooter"><span>&nbsp;</span></div>
+  <div id="footer">
+    <p>
+      {{ site.data.business.name }}, Registered office:
+      {{ site.data.business.addresses | effective: 'registered' | fmt_address_with_postcode }}
+    </p>
+    <p>
+      Registered in England and Wales No. {{ site.data.business.company_number }}.
+      VAT Reg. No. {{ site.data.business.vat_number }}
+    </p>
+  </div>
+ </body>
+</html>

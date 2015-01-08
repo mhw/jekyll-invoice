@@ -1,0 +1,17 @@
+name: My Consultancy Invoices
+markdown: kramdown
+highlighter: null
+encoding: utf-8
+excerpt_separator: ''
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - Rakefile
+gems:
+  - jekyll-invoice
+default_tax: vat
+post:
+  template: _templates/invoice.invoice
+editor: vi
+# htmltopdf: wkhtmltopdf

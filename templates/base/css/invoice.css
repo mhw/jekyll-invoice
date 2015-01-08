@@ -1,0 +1,121 @@
+body {
+ font-family: "Arial", sans-serif;
+ font-size: 10pt;
+ line-height: 12pt;
+}
+
+table {
+ font-family: "Arial", sans-serif;
+ font-size: 10pt;
+ line-height: 12pt;
+}
+
+#logotype {
+ float: left;
+ font-family: "Arial Black", sans-serif;
+ font-size: 16pt;
+}
+
+#sender {
+ float: right;
+}
+
+#title, #detail, #information {
+ clear: both;
+ padding-top: 0.5in;
+}
+
+#title {
+ font-size: 14pt;
+}
+
+.fancy-rule {
+ line-height: normal;
+ border-bottom: 0.8pt solid black;
+}
+
+.fancy-rule u {
+ text-decoration: none;
+ border-bottom: 2pt solid black;
+}
+
+#recipient {
+ float: left;
+}
+
+#invoice-info {
+ float: right;
+}
+
+.info th {
+ font-weight: normal;
+ text-align: right;
+}
+
+.info td {
+ text-align: left;
+}
+
+#detail table {
+ width: 100%;
+}
+
+.dates, .description {
+ text-align: left;
+}
+
+.dates {
+ white-space: nowrap;
+ width: 1%;
+}
+
+.item .description:before {
+ content: "\2013\a0"
+}
+
+.quantity, .rate, .amount, .tax, .tax-rate, .total {
+ text-align: right;
+}
+
+.item td {
+ padding-top: 0.5em;
+ padding-bottom: 0.5em;
+}
+
+#rule td {
+ border-bottom: 0.8pt solid black;
+}
+
+tr.totals .description {
+ text-align: right;
+}
+
+@media screen {
+ #prefooter {
+  display: none;
+ }
+ #footer {
+  padding-top: 0.5in;
+ }
+}
+
+@media print {
+ body {
+  margin: 0;
+  padding: 0;
+ }
+ #prefooter {
+  page-break-after: always;
+ }
+ #prefooter span {
+  display: none;
+ }
+ #footer {
+  position: fixed;
+  bottom: 0;
+ }
+}
+
+#footer p {
+ margin: 0
+}

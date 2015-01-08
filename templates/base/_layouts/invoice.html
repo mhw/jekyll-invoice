@@ -1,0 +1,41 @@
+---
+layout: default
+---
+<h1 id="title" class="fancy-rule"><u>{% if page.copy_invoice %}Copy {% endif %}Invoice</u></h1>
+<div id="recipient">
+{{ site.data.customers[page.customer] | fmt_address: '<br>' }}
+</div>
+<div id="invoice-info">
+ <table class="info">
+  <tr>
+   <th>Invoice number:</th>
+   <td>{{ page.invoice_number | zero_pad }}</td>
+  </tr>
+  <tr>
+   <th>Invoice date:</th>
+   <td>{{ page.date | date: '%d/%m/%Y' }}</td>
+  </tr>
+ </table>
+</div>
+{{ content }}
+<div id="information">
+ <p>Payment should be made within 30 days by money transfer to the following account:</p>
+ <table class="info">
+  <tr>
+   <th>Bank:</th>
+   <td>HSBC</td>
+  </tr>
+  <tr>
+   <th>Account Name:</th>
+   <td>My Consultancy</td>
+  </tr>
+  <tr>
+   <th>Sort code:</th>
+   <td>xx-xx-xx</td>
+  </tr>
+  <tr>
+   <th>Account number:</th>
+   <td>xxxxxxxx</td>
+  </tr>
+ </table>
+</div>

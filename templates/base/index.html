@@ -1,0 +1,23 @@
+---
+layout: default
+---
+
+<div id="home">
+  <h1 id="title">Invoices</h1>
+  <ul class="posts">
+{%  for post in site.posts %}
+{%    unless post.copy_invoice %}
+        <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a>
+        <a href="{{ post.pdf_url }}">(pdf)</a>
+        <a href="{{ post.copy_invoice_url }}">copy invoice</a>
+        <a href="{{ post.copy_invoice_pdf_url }}">(pdf)</a>
+        Value &pound;{{ post.invoice.total | fmt: '%.2f', ',' }}
+        to {{ site.data.customers[post.customer] | first }}
+{%      if post.paid %}
+        - PAID
+{%      endif %}
+        </li>
+{%    endunless %}
+{%  endfor %}
+  </ul>
+</div>
