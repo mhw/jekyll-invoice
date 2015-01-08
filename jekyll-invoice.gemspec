@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Mark H. Wilkinson']
   spec.email         = ['mhw@dangerous-techniques.com']
   spec.summary       = %q{Produce invoices with Jekyll}
-  spec.description   = %q{Plugins for Jekyll to produce nice HTML invoices.}
-  spec.homepage      = ''
+  spec.description   = %q{A collection of Jekyll plugins and conventions to produce nice HTML invoices.}
+  spec.homepage      = 'http://github.com/mhw/jekyll-invoice'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")
