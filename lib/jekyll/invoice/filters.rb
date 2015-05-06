@@ -24,7 +24,11 @@ module Jekyll
       end
 
       def fmt_address(address, separator = ', ')
-        address.join(separator)
+        if address.nil?
+          "No address passed to 'fmt_address'"
+        else
+          address.join(separator)
+        end
       end
 
       def fmt_address_with_postcode(address, separator = ', ')
