@@ -44,6 +44,9 @@ module Jekyll
       end
 
       class Processor
+        # Convenient single character short-hand
+        H = 0.5
+
         def initialize(invoice)
           @invoice = invoice
         end
@@ -62,7 +65,7 @@ module Jekyll
           invoice.set_rate :hour, value
         end
 
-        def line(description, options = {})
+        def line(description, options = {}, &block)
           if days = options.delete(:days)
             if rate = invoice.rates[:day]
               options[:quantity] = days
@@ -83,6 +86,10 @@ module Jekyll
             end
           end
 
+          if value = options.delete(:value)
+            options[:rate] = value
+          end
+
           if date = options.delete(:date)
             options[:period] = date..date
           end
@@ -92,10 +99,81 @@ module Jekyll
 
           options[:tax_rate] = invoice.tax_rate unless options.has_key?(:tax_rate)
 
-          invoice.add Line.new(description, options)
+          if block
+            @description = description
+            @options = options
+            instance_eval &block
+            @description = nil
+            @options = nil
+          else
+            invoice.add Line.new(description, options)
+          end
+        end
+
+        def month(year, month, &block)
+          raise InvoiceError, 'month must be nested within a line' unless @options
+          @options[:year] = year
+          @options[:month] = month
+          instance_eval &block if block
+        end
+
+        def week(start, *days)
+          raise InvoiceError, 'week must be nested within a month' unless @options
+          raise InvoiceError, 'too many days provided' if days.length > 7
+          choose_daily_rate
+          @options[:period] = week_period @options, start
+          @options[:quantity] = days.inject(0) { |a, v| a+v }
+          @options[:unit] = :day
+          invoice.add Line.new(@description, @options)
+        end
+
+        def days(days)
+          raise InvoiceError, 'days must be nested within a month' unless @options
+          choose_daily_rate
+          @options[:period] = day_period @options, days
+          @options[:quantity] = days.inject(0) { |a, (k, v)| a+v }
+          @options[:unit] = :day
+          invoice.add Line.new(@description, @options)
+        end
+
+        def hours(hours)
+          raise InvoiceError, 'hours must be nested within a month' unless @options
+          choose_hourly_rate
+          @options[:period] = day_period @options, hours
+          @options[:quantity] = hours.inject(0) { |a, (k, v)| a+v }
+          @options[:unit] = :hour
+          invoice.add Line.new(@description, @options)
         end
 
         private
+          def choose_daily_rate
+            if rate = invoice.rates[:day]
+              @options[:rate] = rate
+            else
+              raise InvoiceError, "days specified, but no prevailing rate established with 'daily_rate'"
+            end
+          end
+
+          def choose_hourly_rate
+            if rate = invoice.rates[:hour]
+              @options[:rate] = rate
+            else
+              raise InvoiceError, "hours specified, but no prevailing rate established with 'hourly_rate'"
+            end
+          end
+
+          def week_period(options, monday)
+            s = Date.new(options[:year], options[:month], monday)
+            e = s+6
+            s..e
+          end
+
+          def day_period(options, days)
+            s = Date.new(options[:year], options[:month], days.keys.first)
+            e = Date.new(options[:year], options[:month], days.keys.last)
+            s..e
+          end
+
           def convert_dates(o)
             case o
             when Range then convert_dates(o.first)..convert_dates(o.last)
