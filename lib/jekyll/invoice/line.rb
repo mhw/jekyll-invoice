@@ -1,3 +1,5 @@
+require 'bigdecimal'
+
 module Jekyll
   module Invoice
     class Line
@@ -10,6 +12,13 @@ module Jekyll
         if p = options[:period]
           @start_date = p.first
           @end_date   = p.last
+        end
+
+        if @quantity.kind_of? Numeric
+          q = BigDecimal.new(@quantity, 5)
+          if q.frac.zero?
+            @quantity = q.floor
+          end
         end
       end
 
