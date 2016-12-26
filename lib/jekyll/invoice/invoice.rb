@@ -102,7 +102,7 @@ module Jekyll
           if block
             @description = description
             @options = options
-            instance_eval &block
+            instance_eval(&block)
             @description = nil
             @options = nil
           else
@@ -114,7 +114,7 @@ module Jekyll
           raise InvoiceError, 'month must be nested within a line' unless @options
           @options[:year] = year
           @options[:month] = month
-          instance_eval &block if block
+          instance_eval(&block) if block
         end
 
         def week(start, *days)
