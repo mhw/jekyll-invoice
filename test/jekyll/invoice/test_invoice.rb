@@ -114,7 +114,7 @@ module Jekyll
               line 'Do some work', hours: 4
             EOI
           }.must_raise InvoiceError
-          e.message.must_match /hours/
+          e.message.must_match(/hours/)
         end
 
         it 'should support syntactic sugar for single days' do
