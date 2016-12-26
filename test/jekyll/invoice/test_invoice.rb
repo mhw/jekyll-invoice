@@ -35,7 +35,7 @@ module Jekyll
       describe 'tax' do
         describe 'with no rates loaded' do
           it 'should default to no tax type' do
-            invoice.tax_type.must_equal nil
+            invoice.tax_type.must_be_nil
             invoice.tax_rate.must_equal 0
           end
         end
