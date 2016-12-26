@@ -131,7 +131,7 @@ module Jekyll
           raise InvoiceError, 'days must be nested within a month' unless @options
           choose_daily_rate
           @options[:period] = day_period @options, days
-          @options[:quantity] = days.inject(0) { |a, (k, v)| a+v }
+          @options[:quantity] = days.inject(0) { |a, (_, v)| a+v }
           @options[:unit] = :day
           invoice.add Line.new(@description, @options)
         end
@@ -140,7 +140,7 @@ module Jekyll
           raise InvoiceError, 'hours must be nested within a month' unless @options
           choose_hourly_rate
           @options[:period] = day_period @options, hours
-          @options[:quantity] = hours.inject(0) { |a, (k, v)| a+v }
+          @options[:quantity] = hours.inject(0) { |a, (_, v)| a+v }
           @options[:unit] = :hour
           invoice.add Line.new(@description, @options)
         end
