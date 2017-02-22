@@ -74,6 +74,10 @@ module Jekyll
         it 'introduces thousands separators' do
           fmt(12345678.347, '%.2f', ',').must_equal '12,345,678.35'
         end
+
+        it 'tolerates nil content' do
+          fmt(nil, '%.2f', ',').must_equal '0.00'
+        end
       end
 
       describe 'fmt_address' do

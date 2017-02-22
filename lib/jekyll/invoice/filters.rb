@@ -16,6 +16,7 @@ module Jekyll
       end
 
       def fmt(content, format, separator = nil)
+        content ||= 0
         result = Kernel.sprintf(format, content)
         if separator
           result.gsub!(/(?<=\d)(?=(\d\d\d)+(?!\d))/, separator)
