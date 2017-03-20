@@ -1,0 +1,16 @@
+flat:
+  address:
+    - Flat One
+    - Two
+effective:
+  -
+    start: 2016-01-01
+    end: 2016-12-31
+    address:
+      - Effective One
+      - Somewhere
+  -
+    start: 2017-01-01
+    address:
+      - Effective Two
+      - Somewhere else

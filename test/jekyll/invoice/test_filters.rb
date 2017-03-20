@@ -18,6 +18,7 @@ module Jekyll
         let(:rates)     { tax['rates'] }
         let(:business)  { load_data('business.yml') }
         let(:addresses) { business['addresses'] }
+        let(:customers) { load_data('customers.yml') }
 
         it 'uses effective date from context' do
           set_effective_date('2007-01-01')
@@ -44,6 +45,21 @@ module Jekyll
         it 'uses today as the default effective date' do
           effective(addresses, 'registered') \
             .must_equal addresses[1]['registered']
+        end
+
+        it 'defaults to entry with no effective date' do
+          set_effective_date('2016-06-01')
+          effective(customers['flat'], 'address')
+            .must_equal customers['flat']['address']
+        end
+
+        it 'finds effective address if structured correctly' do
+          set_effective_date('2016-06-01')
+          effective(customers['effective'], 'address')
+            .must_equal customers['effective'][0]['address']
+          set_effective_date('2017-06-01')
+          effective(customers['effective'], 'address')
+            .must_equal customers['effective'][1]['address']
         end
       end
 

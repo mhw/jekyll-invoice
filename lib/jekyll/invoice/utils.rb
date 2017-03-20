@@ -3,6 +3,7 @@ module Jekyll
     module Utils
       module_function
       def effective(date_ranges, effective_date)
+        return date_ranges unless date_ranges.kind_of?(Array)
         match = date_ranges.detect do |date_range|
           s = date_range['start']
           e = date_range['end']
