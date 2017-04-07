@@ -1,17 +1,17 @@
 module Jekyll
   module Invoice
     module CopyInvoiceMixin
-      def process(name)
-        super(name)
-        self.slug = "copy-#{self.slug}"
+      def populate_title
+        super
+        if slug = data["slug"]
+          slug = "copy-#{slug}"
+          data["slug"] = slug
+          data["title"] = Jekyll::Utils.titleize_slug(slug)
+        end
       end
     end
 
-    class CopyInvoice < Post
-      include CopyInvoiceMixin
-    end
-
-    class CopyDraftInvoice < Draft
+    class CopyDocument < Document
       include CopyInvoiceMixin
     end
   end
