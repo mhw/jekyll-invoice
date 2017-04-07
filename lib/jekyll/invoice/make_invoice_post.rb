@@ -17,9 +17,9 @@ module Jekyll
         if m = SLUG_MATCHER.match(post.data['slug'])
           post.data['invoice_number'] = m[1]
           post.data['copy_invoice'] = false
-          post.data['pdf_url'] = rewrite_filename(post.url, '', '.pdf')
+          post.data['pdf_url'] = pdf_url(post.url)
           post.data['copy_invoice_url'] = rewrite_filename(post.url, 'copy-', '')
-          post.data['copy_invoice_pdf_url'] = rewrite_filename(post.url, 'copy-', '.pdf')
+          post.data['copy_invoice_pdf_url'] = pdf_url(post.url, 'copy-')
           post.data['invoice'] = make_invoice
           post.content = site.layouts['invoice-table'].content
         end
@@ -47,6 +47,14 @@ module Jekyll
             end
         f = prefix + f if prefix.length > 0
         File.join(File.dirname(src), f)
+      end
+
+      private
+      def pdf_url(src, prefix = '')
+        f = File.basename(src, '.html') + '.pdf'
+        f = prefix + f if prefix.length > 0
+        d = File.dirname(src).sub(%r{^/}, '').gsub('/', '-')
+        '/pdf/' + d + '-' + f
       end
     end
   end
