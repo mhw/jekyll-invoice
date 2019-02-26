@@ -46,6 +46,7 @@ module Jekyll
       class Processor
         # Convenient single character short-hand
         H = 0.5
+        Q = 0.25
 
         def initialize(invoice)
           @invoice = invoice
