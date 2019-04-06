@@ -18,7 +18,7 @@ module Jekyll
           post.data['invoice_number'] = m[1]
           post.data['copy_invoice'] = false
           post.data['pdf_url'] = pdf_url(post.url)
-          post.data['copy_invoice_url'] = rewrite_filename(post.url, 'copy-', '')
+          post.data['copy_invoice_url'] = copy_invoice_url(post.url)
           post.data['copy_invoice_pdf_url'] = pdf_url(post.url, 'copy-')
           post.data['invoice'] = make_invoice
           post.content = site.layouts['invoice-table'].content
@@ -39,14 +39,8 @@ module Jekyll
       end
 
       private
-      def rewrite_filename(src, prefix, ext)
-        f = if ext.length > 0
-              File.basename(src, '.html') + ext
-            else
-              File.basename(src)
-            end
-        f = prefix + f if prefix.length > 0
-        File.join(File.dirname(src), f)
+      def copy_invoice_url(src)
+        File.dirname(src) + '/' + 'copy-' + File.basename(src)
       end
 
       private
