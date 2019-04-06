@@ -2,12 +2,12 @@ module Jekyll
   module Invoice
     module Filters
       def effective_date
-        @context['page.date'] || Time.now
+        @context["page.date"] || Time.now
       end
 
-      def effective(date_ranges, field_list = '')
-        match = Utils.effective(date_ranges, self.effective_date.to_date)
-        field = field_list.split(' ').detect {|f| match.has_key?(f) }
+      def effective(date_ranges, field_list = "")
+        match = Utils.effective(date_ranges, effective_date.to_date)
+        field = field_list.split(" ").detect {|f| match.key?(f) }
         if field
           match[field]
         else
@@ -24,7 +24,7 @@ module Jekyll
         result
       end
 
-      def fmt_address(address, separator = ', ')
+      def fmt_address(address, separator = ", ")
         if address.nil?
           "No address passed to 'fmt_address'"
         else
@@ -32,17 +32,17 @@ module Jekyll
         end
       end
 
-      def fmt_address_with_postcode(address, separator = ', ')
-        [ address[0...-1].join(separator), address[-1] ].join(' ')
+      def fmt_address_with_postcode(address, separator = ", ")
+        [address[0...-1].join(separator), address[-1]].join(" ")
       end
 
       def zero_pad(s, width = 8)
         s = if s.nil?
-              ''
-            else
-              s.to_s
-            end
-        ('0' * width + s)[-width..-1]
+          ""
+        else
+          s.to_s
+        end
+        ("0" * width + s)[-width..-1]
       end
     end
   end

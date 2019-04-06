@@ -2,14 +2,14 @@
 #
 # == Dependencies ==============================================================
 
-require 'rake'
-require 'yaml'
-require 'fileutils'
+require "rake"
+require "yaml"
+require "fileutils"
 
 # == Configuration =============================================================
 
 # Set "rake build" as default task
-task :default => :build
+task default: :build
 
 # Load the configuration file
 CONFIG = YAML.load_file("_config.yml")
@@ -25,8 +25,8 @@ DRAFTS = "_drafts"
 
 # Check that a customer is listed.
 def check_customer(customer)
-  if customer.nil? or customer.empty?
-    customer_file = '_data/customers.yml'
+  if customer.nil? || customer.empty?
+    customer_file = "_data/customers.yml"
     customers = YAML.load_file customer_file
     puts "Customers listed in #{customer_file}:"
     customers.each_key do |c|
@@ -46,8 +46,8 @@ def next_invoice_number
       invoice_number = n if n > invoice_number
     end
   end
-  puts "invoice number #{invoice_number+1}"
-  invoice_number+1
+  puts "invoice number #{invoice_number + 1}"
+  invoice_number + 1
 end
 
 # Transform the invoice number to a slug
@@ -62,15 +62,15 @@ end
 
 # Save the file with the customer in the YAML front matter
 def write_file(content, customer, directory, filename)
-  parsed_content = "#{content.sub("customer:", "customer: \"#{customer}\"")}"
+  parsed_content = content.sub("customer:", "customer: \"#{customer}\"").to_s
   File.write("#{directory}/#{filename}", parsed_content)
   puts "#{filename} was created in '#{directory}'."
 end
 
 # Create the file with the slug and open the default editor
 def create_file(directory, filename, content, customer, editor)
-  FileUtils.mkdir(directory) unless File.exists?(directory)
-  if File.exists?("#{directory}/#{filename}")
+  FileUtils.mkdir(directory) unless File.exist?(directory)
+  if File.exist?("#{directory}/#{filename}")
     raise "The file already exists."
   else
     write_file(content, customer, directory, filename)
@@ -118,9 +118,9 @@ task :issue do
   end
   print "> "
   number = $stdin.gets
-  if number =~ /\D/
+  if /\D/.match?(number)
     filename = files[number.to_i - 1].sub("#{DRAFTS}/", "")
-    FileUtils.mkdir(POSTS) unless File.exists?(POSTS)
+    FileUtils.mkdir(POSTS) unless File.exist?(POSTS)
     FileUtils.mv("#{DRAFTS}/#{filename}", "#{POSTS}/#{DATE}-#{filename}")
     puts "#{filename} was moved to '#{POSTS}'."
   else
@@ -132,10 +132,10 @@ end
 desc "Build the site"
 task :build do
   system("bundle exec jekyll build --drafts")
-  if htmltopdf = CONFIG['htmltopdf']
+  if (htmltopdf = CONFIG["htmltopdf"])
     invoices = Dir["_site/*/*/*/*invoice-*.html"]
     invoices.each do |src|
-      pdf = File.join(File.dirname(src), File.basename(src, '.html') + '.pdf')
+      pdf = File.join(File.dirname(src), File.basename(src, ".html") + ".pdf")
       system "#{htmltopdf} #{src} #{pdf}"
       # Remove content that may change each time the PDF is regenerated
       # in case we are versioning the PDF output.

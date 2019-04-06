@@ -7,7 +7,7 @@ module Jekyll
       def generate(site)
         copy_invoices = []
         site.posts.docs.each do |post|
-          if SLUG_MATCHER.match(post.data['slug'])
+          if SLUG_MATCHER.match?(post.data["slug"])
             copy_invoices << MakeCopyInvoicePost.new(post).make
           end
         end

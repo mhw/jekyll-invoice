@@ -1,4 +1,4 @@
-require 'jekyll'
+require "jekyll"
 
-require 'jekyll/invoice'
-require 'jekyll/pluralize'
+require "jekyll/invoice"
+require "jekyll/pluralize"

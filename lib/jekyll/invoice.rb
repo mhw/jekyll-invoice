@@ -16,7 +16,7 @@ Jekyll::Hooks.register :site, :post_read do |site|
 end
 
 Jekyll::Hooks.register :posts, :pre_render do |post, payload|
-  payload['invoice'] = post.data['invoice']
+  payload["invoice"] = post.data["invoice"]
 end
 
 class InvoiceError < StandardError
